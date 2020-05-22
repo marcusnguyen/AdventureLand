@@ -1,0 +1,8 @@
+{
+  "name": "AdventureLand",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:marcusnguyen/AdventureLand.git",
+  "author": "Marcus Nguyen <dmnguyen1996@gmail.com>",
+  "license": "MIT"
+}
