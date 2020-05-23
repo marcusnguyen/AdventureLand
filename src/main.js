@@ -1,10 +1,10 @@
 import {
   resupply_potions,
   num_items,
-  get_npc,
   distance_to_point,
   start_party,
   find_viable_targets,
+  move_to_target,
 } from './utils'
 import {
   min_potions,
@@ -109,28 +109,18 @@ export default function main() {
     }
   }
 
-  //This function will ether move straight towards the target entity,
-  //or utilize smart_move to find their way there.
-  function move_to_target(target) {
-    if (can_move_to(target.real_x, target.real_y)) {
-      smart.moving = false
-      smart.searching = false
-      move(
-        character.real_x + (target.real_x - character.real_x) / 2,
-        character.real_y + (target.real_y - character.real_y) / 2
-      )
-    } else {
-      if (!smart.moving) {
-        smart_move({ x: target.real_x, y: target.real_y })
-      }
-    }
-  }
-
-  add_bottom_button(1, 'Reload code', () => {
+  add_bottom_button(1, 'Spawn', () => {
     const party = players_to_invite
     party.forEach((char) => {
       stop_character(char)
       start_character(char, 2)
+    })
+  })
+
+  add_bottom_button(2, 'Despawn', () => {
+    const party = players_to_invite
+    party.forEach((char) => {
+      stop_character(char)
     })
   })
 }
