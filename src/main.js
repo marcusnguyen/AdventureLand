@@ -18,9 +18,12 @@ import { isEmpty } from 'ramda'
 export default function main() {
   game_log('---Script Start---')
   var state = 'farm'
-  var current_party = get_party()
 
-  if (isEmpty(current_party)) start_party()
+  setInterval(function () {
+    var current_party = get_party()
+
+    if (isEmpty(current_party)) start_party()
+  }, 10000)
 
   //Movement And Attacking
   setInterval(function () {
