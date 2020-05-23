@@ -1,11 +1,4 @@
-import {
-  resupply_potions,
-  num_items,
-  distance_to_point,
-  start_party,
-  find_viable_targets,
-  move_to_target,
-} from './utils'
+import { resupply_potions, num_items, start_party, find_viable_targets } from './utils'
 import {
   min_potions,
   potion_types,
@@ -13,7 +6,14 @@ import {
   players_to_invite,
   party_leader,
 } from './common/variables'
+import { ranger, mage, warrior } from './classes'
 import { isEmpty } from 'ramda'
+
+const classes = {
+  ranger,
+  mage,
+  warrior,
+}
 
 export default function main() {
   game_log('---Script Start---')
@@ -92,21 +92,17 @@ export default function main() {
   //This function contains our logic for when we're farming mobs
   function farm() {
     var target = find_viable_targets()[0]
-    //Attack or move to target
-    if (target != null) {
-      if (distance_to_point(target.real_x, target.real_y) < character.range) {
-        if (can_attack(target)) {
-          attack(target)
-        }
-      } else {
-        move_to_target(target)
-      }
-    } else {
-      if (!smart.moving) {
-        game_log('finding a target')
-        smart_move({ to: monster_to_farm[0] })
+
+    if (!target) {
+      target = get_nearest_monster({ min_xp: 100, max_att: 120 })
+      if (target) change_target(target)
+      else {
+        set_message('No Monsters')
+        return
       }
     }
+
+    classes[character.ctype].attack(target)
   }
 
   add_bottom_button(1, 'Spawn', () => {
