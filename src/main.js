@@ -125,4 +125,12 @@ export default function main() {
       }
     }
   }
+
+  add_bottom_button(1, 'Reload code', () => {
+    const party = players_to_invite
+    party.forEach((char) => {
+      stop_character(char)
+      start_character(char, 2)
+    })
+  })
 }
