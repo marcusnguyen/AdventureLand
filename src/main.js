@@ -1,13 +1,26 @@
-import { resupply_potions, num_items, get_npc, distance_to_point } from './utils'
-import { min_potions, potion_types } from './common/variables'
+import {
+  resupply_potions,
+  num_items,
+  get_npc,
+  distance_to_point,
+  start_party,
+} from './utils'
+import {
+  min_potions,
+  potion_types,
+  monster_to_farm,
+  players_to_invite,
+} from './common/variables'
+import { isEmpty } from 'ramda'
 
 export default function main() {
   game_log('---Script Start---')
   //Put monsters you want to kill in here
   //If your character has no target, it will travel to a spawn of the first monster in the list below.
-  var monster_targets = ['squig']
-
   var state = 'farm'
+  var current_party = get_party()
+
+  if (isEmpty(current_party)) start_party()
 
   //Movement And Attacking
   setInterval(function () {
@@ -37,6 +50,17 @@ export default function main() {
       use_hp_or_mp()
     }
   }, 500) //Execute 2 times per second
+
+  window.on_party_invite = on_party_invite
+  window.on_party_request = on_party_request
+
+  function on_party_invite(name) {
+    if (name === party_leader) accept_party_invite(name)
+  }
+
+  function on_party_request(name) {
+    if (players_to_invite.contains(name)) accept_party_request(name)
+  }
 
   function state_controller() {
     //Default to farming
@@ -69,11 +93,7 @@ export default function main() {
     if (target != null) {
       if (distance_to_point(target.real_x, target.real_y) < character.range) {
         if (can_attack(target)) {
-          if (!is_on_cooldown('burst')) {
-            use_skill('burst', target)
-          } else {
-            attack(target)
-          }
+          attack(target)
         }
       } else {
         move_to_target(target)
@@ -81,7 +101,7 @@ export default function main() {
     } else {
       if (!smart.moving) {
         game_log('finding a target')
-        smart_move({ to: monster_targets[0] })
+        smart_move({ to: monster_to_farm[0] })
       }
     }
   }
@@ -118,7 +138,7 @@ export default function main() {
           mob.target == character.name) &&
           mob.type == 'monster' &&
           (parent.party_list.includes(mob.target) || mob.target == character.name)) ||
-        monster_targets.includes(mob.mtype)
+        monster_to_farm.includes(mob.mtype)
     )
 
     for (id in monsters) {
