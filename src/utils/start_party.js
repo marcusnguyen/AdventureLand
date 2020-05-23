@@ -5,5 +5,7 @@ export default start_party = () => {
     players_to_invite.forEach((name) => {
       send_party_invite(name, false)
     })
+  } else {
+    send_party_request(party_leader)
   }
 }
