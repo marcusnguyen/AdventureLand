@@ -1,4 +1,10 @@
-import { resupply_potions, num_items, start_party, find_viable_targets } from './utils'
+import {
+  resupply_potions,
+  num_items,
+  start_party,
+  find_viable_targets,
+  send_gold_to_merchant,
+} from './utils'
 import {
   min_potions,
   potion_types,
@@ -86,6 +92,10 @@ export default function main() {
         character.real_y + (tank.real_y - character.real_y) / 2
       )
     }
+  }, 5000)
+
+  setInterval(function () {
+    send_gold_to_merchant()
   }, 5000)
 
   window.on_party_invite = on_party_invite
