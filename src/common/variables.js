@@ -1,4 +1,5 @@
 const min_potions = 50 //The number of potions at which to do a resupply run.
+const no_potions_to_buy = 200
 const potion_types = ['hpot0', 'mpot0'] //The types of potions to keep supplied.
 const monster_to_farm = ['bee']
 const players_to_invite = ['MyraWarrior', 'MyraRanger']
@@ -14,4 +15,5 @@ export {
   party_leader,
   min_gold,
   merchant,
+  no_potions_to_buy,
 }

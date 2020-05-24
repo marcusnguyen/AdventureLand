@@ -1,7 +1,5 @@
 import empty_slots from './empty_slots'
-import { min_potions, potion_types } from '../common/variables'
-
-const purchase_amount = 200
+import { min_potions, potion_types, no_potions_to_buy } from '../common/variables'
 
 export default buy_potions = () => {
   if (empty_slots() > 0) {
@@ -11,13 +9,13 @@ export default buy_potions = () => {
       var item_def = parent.G.items[type]
 
       if (item_def != null) {
-        var cost = item_def.g * purchase_amount
+        var cost = item_def.g * no_potions_to_buy
 
         if (character.gold >= cost) {
           var num_potions = num_items(type)
 
           if (num_potions < min_potions) {
-            buy(type, purchase_amount)
+            buy(type, no_potions_to_buy)
           }
         } else {
           game_log('Not Enough Gold!')

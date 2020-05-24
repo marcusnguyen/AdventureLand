@@ -13,5 +13,5 @@ export default send_gold_to_merchant = () => {
   )
     return
   game_log(`Sending ${character.gold} to ${merchantName}`)
-  send_gold(merchant, character.gold)
+  send_gold(merchant, character.gold - min_gold)
 }

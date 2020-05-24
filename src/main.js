@@ -13,7 +13,7 @@ import {
   party_leader,
 } from './common/variables'
 import { ranger, mage, warrior } from './classes'
-import { isEmpty } from 'ramda'
+import { isEmpty, isNil } from 'ramda'
 
 const classes = {
   ranger,
@@ -76,7 +76,12 @@ export default function main() {
   }, 500) //Execute 2 times per second
 
   setInterval(function () {
-    if (character.name === 'MyraWarrior' || state === 'resupply_potions') return
+    if (
+      character.name === 'MyraWarrior' ||
+      state === 'resupply_potions' ||
+      isNil(character.party)
+    )
+      return
     var tank = get_player('MyraWarrior')
     var safeRange = 200
 
@@ -95,6 +100,7 @@ export default function main() {
   }, 5000)
 
   setInterval(function () {
+    if (state === 'resupply_potions') return
     send_gold_to_merchant()
   }, 5000)
 
@@ -135,17 +141,6 @@ export default function main() {
 
   //This function contains our logic for when we're farming mobs
   function farm() {
-    var target = find_viable_targets()[0]
-
-    if (!target) {
-      target = get_nearest_monster({ min_xp: 100, max_att: 120 })
-      if (target) change_target(target)
-      else {
-        set_message('No Monsters')
-        return
-      }
-    }
-
-    classes[character.ctype].attack(target)
+    classes[character.ctype].farm()
   }
 }
