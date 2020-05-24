@@ -19,6 +19,21 @@ export default function main() {
   game_log('---Script Start---')
   var state = 'farm'
 
+  add_bottom_button(1, 'Spawn', () => {
+    const party = players_to_invite
+    party.forEach((char) => {
+      stop_character(char)
+      start_character(char, 2)
+    })
+  })
+
+  add_bottom_button(2, 'Despawn', () => {
+    const party = players_to_invite
+    party.forEach((char) => {
+      stop_character(char)
+    })
+  })
+
   setInterval(function () {
     var current_party = get_party()
 
@@ -53,6 +68,25 @@ export default function main() {
       use_hp_or_mp()
     }
   }, 500) //Execute 2 times per second
+
+  setInterval(function () {
+    if (character.name === 'MyraWarrior' || state === 'resupply_potions') return
+    var tank = get_player('MyraWarrior')
+    var safeRange = 200
+
+    var distance = Math.hypot(
+      character.real_x - tank.real_x,
+      character.real_y - tank.real_y
+    )
+
+    // Comfortable range
+    if (distance >= safeRange) {
+      move(
+        character.real_x + (tank.real_x - character.real_x) / 2,
+        character.real_y + (tank.real_y - character.real_y) / 2
+      )
+    }
+  }, 5000)
 
   window.on_party_invite = on_party_invite
   window.on_party_request = on_party_request
@@ -104,19 +138,4 @@ export default function main() {
 
     classes[character.ctype].attack(target)
   }
-
-  add_bottom_button(1, 'Spawn', () => {
-    const party = players_to_invite
-    party.forEach((char) => {
-      stop_character(char)
-      start_character(char, 2)
-    })
-  })
-
-  add_bottom_button(2, 'Despawn', () => {
-    const party = players_to_invite
-    party.forEach((char) => {
-      stop_character(char)
-    })
-  })
 }
