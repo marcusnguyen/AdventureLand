@@ -8,7 +8,7 @@ export default send_gold_to_merchant = () => {
     !merchant ||
     merchant.ctype !== 'merchant' ||
     merchant.owner !== character.owner ||
-    distance(merchant, character) > 400 ||
+    distance(merchant, character) > 600 ||
     character.gold < min_gold
   )
     return
